@@ -1,0 +1,9 @@
+Breakpoint 1 at 0x40085d: file pa01.c, line 81.
+Starting program: /home/shay/a/suciu/264/hw/ECE264Assignments/Fall2014/PA01/pa01 
+
+Program exited normally.
+Missing separate debuginfos, use: debuginfo-install glibc-2.12-1.132.el6_5.4.x86_64
+No symbol "argc" in current context.
+No symbol "smallest" in current context.
+The program is not being run.
+The program is not being run.
