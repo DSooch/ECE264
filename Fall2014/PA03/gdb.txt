@@ -1,0 +1,120 @@
+The program is not being run.
+List of classes of commands:
+
+aliases -- Aliases of other commands
+breakpoints -- Making program stop at certain points
+data -- Examining data
+files -- Specifying and examining files
+internals -- Maintenance commands
+obscure -- Obscure features
+running -- Running the program
+stack -- Examining the stack
+status -- Status inquiries
+support -- Support facilities
+tracepoints -- Tracing of program execution without stopping the program
+user-defined -- User-defined commands
+
+Type "help" followed by a class name for a list of commands in that class.
+Type "help all" for the list of all commands.
+Type "help" followed by command name for full documentation.
+Type "apropos word" to search for commands related to "word".
+Command name abbreviations are allowed if unambiguous.
+Making program stop at certain points.
+
+List of commands:
+
+awatch -- Set a watchpoint for an expression
+break -- Set breakpoint at specified line or function
+catch -- Set catchpoints to catch events
+catch assert -- Catch failed Ada assertions
+catch catch -- Catch an exception
+catch exception -- Catch Ada exceptions
+catch exec -- Catch calls to exec
+catch fork -- Catch calls to fork
+catch syscall -- Catch system calls by their names and/or numbers
+catch throw -- Catch an exception
+catch vfork -- Catch calls to vfork
+clear -- Clear breakpoint at specified line or function
+commands -- Set commands to be executed when a breakpoint is hit
+condition -- Specify breakpoint number N to break only if COND is true
+delete -- Delete some breakpoints or auto-display expressions
+delete bookmark -- Delete a bookmark from the bookmark list
+delete breakpoints -- Delete some breakpoints or auto-display expressions
+delete checkpoint -- Delete a checkpoint (experimental)
+delete display -- Cancel some expressions to be displayed when program stops
+delete mem -- Delete memory region
+delete tracepoints -- Delete specified tracepoints
+delete tvariable -- Delete one or more trace state variables
+disable -- Disable some breakpoints
+disable breakpoints -- Disable some breakpoints
+disable display -- Disable some expressions to be displayed when program stops
+disable mem -- Disable memory region
+disable tracepoints -- Disable specified tracepoints
+enable -- Enable some breakpoints
+enable breakpoints -- Enable some breakpoints
+enable breakpoints delete -- Enable breakpoints and delete when hit
+enable breakpoints once -- Enable breakpoints for one hit
+enable delete -- Enable breakpoints and delete when hit
+enable display -- Enable some expressions to be displayed when program stops
+enable mem -- Enable memory region
+enable once -- Enable breakpoints for one hit
+enable tracepoints -- Enable specified tracepoints
+ftrace -- Set a fast tracepoint at specified line or function
+hbreak -- Set a hardware assisted  breakpoint
+ignore -- Set ignore-count of breakpoint number N to COUNT
+rbreak -- Set a breakpoint for all functions matching REGEXP
+rwatch -- Set a read watchpoint for an expression
+save -- Save breakpoint definitions as a script
+save breakpoints -- Save current breakpoint definitions as a script
+save gdb-index -- Save a .gdb-index file
+save tracepoints -- Save current tracepoint definitions as a script
+strace -- Set a static tracepoint at specified line
+tbreak -- Set a temporary breakpoint
+tcatch -- Set temporary catchpoints to catch events
+tcatch assert -- Catch failed Ada assertions
+tcatch catch -- Catch an exception
+tcatch exception -- Catch Ada exceptions
+tcatch exec -- Catch calls to exec
+tcatch fork -- Catch calls to fork
+tcatch syscall -- Catch system calls by their names and/or numbers
+tcatch throw -- Catch an exception
+tcatch vfork -- Catch calls to vfork
+thbreak -- Set a temporary hardware assisted breakpoint
+trace -- Set a tracepoint at specified line or function
+watch -- Set a watchpoint for an expression
+
+Type "help" followed by command name for full documentation.
+Type "apropos word" to search for commands related to "word".
+Command name abbreviations are allowed if unambiguous.
+Breakpoint 1 at 0x4006d4: file test.c, line 10.
+Starting program: /home/shay/a/suciu/work/Fall2014/PA03/pa03 
+
+Breakpoint 1, main () at test.c:10
+warning: Source file is more recent than executable.
+10	    char * * strArr = malloc(len * sizeof(char*));
+__libc_malloc (bytes=48) at malloc.c:3619
+3619	{
+3624	    = force_reg (__malloc_hook);
+3625	  if (__builtin_expect (hook != NULL, 0))
+3626	    return (*hook)(bytes, RETURN_ADDRESS (0));
+3690	}
+3626	    return (*hook)(bytes, RETURN_ADDRESS (0));
+malloc_hook_ini (sz=48, caller=0x4006e5) at hooks.c:36
+36	  __malloc_hook = NULL;
+35	{
+36	  __malloc_hook = NULL;
+37	  ptmalloc_init();
+ptmalloc_init () at arena.c:467
+467	{
+475	  if(__malloc_initialized >= 0) return;
+476	  __malloc_initialized = 0;
+485	    ptmalloc_init_minimal();
+ptmalloc_init_minimal () at arena.c:410
+410	  mp_.top_pad        = DEFAULT_TOP_PAD;
+Continuing.
+
+Program exited normally.
+No breakpoint at this line.
+No breakpoint at 10.
+Function "line" not defined.
+Undefined command: "exit".  Try "help".

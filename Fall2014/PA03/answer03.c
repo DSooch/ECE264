@@ -15,23 +15,18 @@ char * strcat_ex(char * * dest, int * n, const char * src)
 			buffer[0] = '\0';
 
 			*n = strlen(src) * 2 + 1;
-
-			free(*dest);
-
-			*dest = buffer;
-
 		} else
 		{
 			buffer = malloc((strlen(src) + strlen(*dest)) * 2 + 1);
 
 			*n = (strlen(src) + strlen(*dest)) * 2 + 1;
 		
-			strcpy(buffer, *dest);
-
-			free(*dest);
-
-			*dest = buffer;
+			strcpy(buffer, *dest);	
 		}
+
+		free(*dest);
+
+		*dest = buffer;
 	}
 	
 	strcat(*dest, src);
@@ -41,13 +36,54 @@ char * strcat_ex(char * * dest, int * n, const char * src)
 
 char * * explode(const char * str, const char * delims, int * arrLen)
 {
-	return (0);
+	int count;
+	int numDelims;
+	char * * strArr;
+	int ind;
+	int last;
+	int arrInd;
+
+	for (count = 0, numDelims = 0; str[count] != '\0'; count++)
+	{
+		if (strchr(delims, str[count]) != NULL)
+		{
+			numDelims++;
+		}
+	}
+	
+	*arrLen = (numDelims + 1);
+
+	strArr = malloc(sizeof(char *) * (numDelims + 1));
+
+	for (last = 0, ind = 0, arrInd = 0; ind < strlen(str); ind++)
+	{
+		if (strchr(delims, str[ind]) != NULL)
+		{
+			strArr[arrInd] = malloc(sizeof(char) * (ind - last + 1));
+
+			memcpy(strArr[arrInd], str + last, ind - last);
+
+			strArr[arrInd][ind - last] = '\0';
+			
+			last = ind + 1;
+
+			arrInd++;
+		}
+	}
+
+	strArr[arrInd] = malloc(sizeof(char) * (ind - last + 1));
+
+	memcpy(strArr[arrInd], str + last, ind - last);
+
+	strArr[arrInd][ind - last] = '\0';
+
+	return (strArr);
 }
 
 char * implode(char * * strArr, int len, const char * glue)
 {
 	int count;
-	char * * newStr = NULL;
+	char * newStr = NULL;
 	int n = 0;
 
 	for (count = 0; count < len; count++)
@@ -62,7 +98,7 @@ char * implode(char * * strArr, int len, const char * glue)
 		}
 	}
 
-	return (*newStr);
+	return (newStr);
 }
 
 int comparator(const void * a, const void * b)
