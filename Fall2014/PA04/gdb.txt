@@ -1,0 +1,32 @@
+Breakpoint 1 at 0x400783: file grep-lite.c, line 1.
+Starting program: /home/shay/a/suciu/ECE264/Fall2014/PA04/grep-lite 
+
+Breakpoint 1, main (argc=1, argv=0x7fffffffe408) at grep-lite.c:14
+14		char * line = NULL;
+17		pattern = argv[argc - 1];
+19		if (argv[argc - 1][0] == '-')
+25		for (count = 1, invert = 0, lines = 0, quiet = 0; count < (argc - 1); count++)
+64		fptr = stdin;
+66		for (linenum = 1, found = 0; fgets(line, 2000, fptr) != NULL; linenum++)
+_IO_fgets (buf=0x0, n=2000, fp=0x3f7a18e6c0) at iofgets.c:37
+37	{
+42	  if (n <= 0)
+37	{
+42	  if (n <= 0)
+44	  if (__builtin_expect (n == 1, 0))
+52	  _IO_acquire_lock (fp);
+56	  old_error = fp->_IO_file_flags & _IO_ERR_SEEN;
+58	  count = INTUSE(_IO_getline) (fp, buf, n - 1, '\n', 1);
+57	  fp->_IO_file_flags &= ~_IO_ERR_SEEN;
+58	  count = INTUSE(_IO_getline) (fp, buf, n - 1, '\n', 1);
+Continuing.
+
+Program received signal SIGSEGV, Segmentation fault.
+_IO_getline_info (fp=0x3f7a18e6c0, buf=0x0, n=1999, delim=10, extract_delim=1, 
+    eof=0x0) at iogetline.c:91
+91		  *ptr++ = c;
+A debugging session is active.
+
+	Inferior 1 [process 13704] will be killed.
+
+Quit anyway? (y or n) 

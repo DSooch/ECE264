@@ -7,9 +7,8 @@ int main(int argc, char * * argv)
 	int count;
 	FILE * fptr;
 	int ch;
-	int skip;
 
-	for (count = 1, skip = 0; count < argc; count++)
+	for (count = 1; count < argc; count++)
 	{
 		if (!strcmp(argv[count],"--help"))
 		{
@@ -25,10 +24,13 @@ int main(int argc, char * * argv)
 
 		if (!strcmp(argv[count], "-"))
 		{
-			skip = 1;
-		}
+			fptr = stdin;
 
-		if (!skip)
+			for (ch = fgetc(fptr); ch != EOF; ch = fgetc(fptr))
+			{
+				fputc(ch, stdout);
+			}
+		} else
 		{
 			fptr = fopen(argv[count], "r");
 
@@ -38,13 +40,22 @@ int main(int argc, char * * argv)
 				return EXIT_FAILURE;
 			}
 
-			for (ch = fgetc(fptr); ch != EOF;)
+			for (ch = fgetc(fptr); ch != EOF; ch = fgetc(fptr))
 			{
 				fputc(ch, stdout);
-				ch = fgetc(fptr);
 			}
 
 			fclose(fptr);
+		}
+	}
+
+	if (argc == 1)
+	{
+		fptr = stdin;
+
+		for (ch = fgetc(fptr); ch != EOF; ch = fgetc(fptr))
+		{
+			fputc(ch, stdout);
 		}
 	}
 
