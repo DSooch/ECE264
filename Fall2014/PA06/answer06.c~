@@ -1,0 +1,12 @@
+#include "answer06.h"
+#include <stdlib.h>
+#include <stdio.h>
+
+void print_directions(char * * maze, int w, int h)
+{
+	return;
+}
+
+int recur()
+{
+}
