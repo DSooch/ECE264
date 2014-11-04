@@ -1,118 +1,87 @@
-#ifndef ANSWER09_H
-#define ANSWER09_H
-
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
-// -------------------------------------------------------------------- HuffNode
+#ifndef PA09_H
+#define PA09_H
 
-/**
- * A Huffman coding tree. We must implement two small functions... 
+/* A BusinessNode contains the name, address, and average rating of a Business.
+ * It also contains pointers to the left and right children of the node.
+ */
+
+typedef struct bnode {
+  char * name;
+  char * stars;
+  char * address;
+
+  struct bnode * left;
+  struct bnode * right;
+} BusinessNode;
+
+/*
+ * Construct one BusinessNode. You need to allocate memory for this node first.
  *
- * (1) HuffNode_create(value);         // create a new HuffNode
- * (2) HuffNode_destory(tree);         // free all memory safely
- */
-typedef struct leaf {
-    int value;
-    struct leaf * left;  // left sub-tree
-    struct leaf * right; // right sub-tree
-} HuffNode;
-
-/**
- * Create a new, properly intialized HuffNode
- */
-HuffNode * HuffNode_create(int value);
-
-/**
- * Destroy a tree, including all sub-children. Must handle NULL values safely.
- */
-void HuffNode_destroy(HuffNode * tree);
-
-// ----------------------------------------------------------------------- Stack
-
-/**
- * We need a "Stack" to build the tree structure that is used to decode
- * a Huffman encoding. Stacks are very simple to implement with linked lists.
- * We must implement the following functions (given below). Each of these 
- * functions should only be a few lines of code.
+ * The caller needs to make sure to use strdup(...) for the arguments, do not
+ * use strdup(...) inside of this function.
  *
- * (1) Stack_create();              // Allocate a brand new stack.
- * (2) Stack_destroy(stack);        // Clean up memory for the stack.
- * (3) TreeStack_isEmpty(stack);    // TRUE iff (if and only if) the stack is empty.
- * (4) TreeStack_pushFront(stack, tree); // push a tree onto the stack.
- * (6) TreeStack_popFront(stack);  // remove a tree from the stack and return it.
+ * stars: the stars of this business
+ * name: name of this business
+ * address: address of this business
+ */
+BusinessNode *
+create_node(char * stars, char * name, char * address);
+
+
+/* Insert a node into a BST. Primarily used in load_tree_from_file(). Return a
+ * pointer to the root of the BST.
+ */
+BusinessNode *
+tree_insert(BusinessNode * node, BusinessNode * root);
+
+/* Parse a .tsv file line by line, create a BusinessNode for each entry, and
+ * enter that node into a new BST. Return a pointer to the root of the BST.
  *
- * Altogether, these six functions should be around 40 lines of code.
+ * The explode(...) function from PA03 may be useful for breaking up a lines 
+ * into seperate fields. 
  */
-typedef struct StackNode_st
-{
-    HuffNode * tree;
-    struct StackNode_st * next;
-} StackNode;
+BusinessNode *
+load_tree_from_file(char * filename);
 
-typedef struct Stack_st
-{
-    StackNode * head; // head node of a linked-list
-} Stack;
 
-/**
- * Returns a pointer to a new empty stack struct
- */
-Stack * Stack_create();
-
-/**
- * Frees all memory associated with the stack. 
- * Don't forget that you must free the entire contained linked-list.
- * Also, you must safely do nothing if stack == NULL. 
- */
-void Stack_destroy(Stack * stack);
-
-/**
- * Returns TRUE (something other than zero) if the stack is empty.
- */
-int Stack_isEmpty(Stack * stack);
-
-/**
- * Pop the front 'value' from the stack.
+/* Search a BusinessNode BST for the node with the name 'name'. Returns
+ * pointer to the node with a match.
  *
- * More precisely, this function must do two things:
- * (1) Return the value of the head node of the stack's list
- * (2) Remove the head node of the stack's list, freeing it.
+ * If there is no match, return NULL.
  */
-HuffNode * Stack_popFront(Stack * stack);
+BusinessNode *
+tree_search_name(char * name, BusinessNode * root);
 
-/**
- * Push a 'value' onto the front of the stack.
+/* Print out a single node: name, address, and stars
+ * The format can be similar to this:
  *
- * More precisely, this function must:
- * (1) Create a new StackNode with 'tree' for its tree.
- * (2) Push that new StackNode onto the front of the stack's list.
+ * Country Cafe
+ * ============
+ * Stars:
+ *    3.5
+ * Address:
+ *    1030 Emerald Ter, Sun Prairie, WI 53590
+ *
+ * This function is not graded, but it could come in very handful while
+ * debugging this assignment.
  */
-void Stack_pushFront(Stack * stack, HuffNode * tree);
+void
+print_node(BusinessNode * node);
 
-// -------------------------------------------------------- Pop Pop combine Push
-
-/**
- * This function helps simplify building a Huffman Coding Tree from the header
- * information. It takes a stack as input. As a precondition, you can assume 
- * that the stack has at least two nodes. This function pops two nodes, combines
- * them into a single node, and pushes the new node back onto the stack. See
- * the Huffman_Coding.pdf to understand conceptually how this should be done.
+/* Print the entire tree, starting from the root. Like the print_node(...)
+ * function, this is not graded.
  */
-void Stack_popPopCombinePush(Stack * stack);
+void
+print_tree(BusinessNode * tree);
 
-// ---------------------------------------------------- Reading HuffTree headers
-
-/**
- * Read a Huffman Coding Tree (in text format) from 'fp'.
+/* Deallocate all of the memory used by a BusinessNode BST, without memory
+ * leaks.
  */
-HuffNode * HuffTree_readTextHeader(FILE * fp);
-
-/**
- * Read a Huffman Coding Tree (in binary format) from 'fp'.
- * You will need to (conceptually) read a file a bit at a time. See the README
- * for hints on how to do this.
- */
-HuffNode * HuffTree_readBinaryHeader(FILE * fp);
+void
+destroy_tree(BusinessNode * root);
 
 #endif
-

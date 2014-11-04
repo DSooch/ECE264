@@ -1,79 +1,28 @@
-(Derived from an assignment by Professor Vijay Raghunathan)
-
-Please read the entire README (including FAQ at the end) before
-starting your assignment, or asking for help.
+Please read the entire README before starting your assignment, or asking
+for help.
 
 // ~ Overview ~ //
 
-Huffman encoding is a loss-less compression technique that is used
-widely in such things as JPEG compression and MP3 compression. It was
-developed in the 1950s (!) by David Huffman, who was doing his PhD at
-MIT. Huffman encoding is still used because it is simple and, under
-certain plausible conditions, it is optimal, which means that someone
-*proved* that there is no better way to compress data. (!)
-
-Please read the entire attached PDF file from Spring 2013. This file
-includes the relevant theory for Huffman encoding.
-
-To complete this assignment, you must write ten functions, as listed
-in "answer09.h".
-
-// ~ Hard ~ //
-
-THIS ASSIGNMENT IS HARD. DO NOT LEAVE IT TO THE LAST MINUTE.
+Recursion is an elegant method for solving many problems, and many data
+structures are actually easier to manipulate with recursive functions.
+In this assignment, we will see how a binary tree (actually any tree
+data structure) can utilize the power of recursion.
 
 // ~ Learning Goals ~ //
 
 (1) Recursion
-(2) Linked-lists
-(3) Binary Trees
-(4) Binary files
-(5) Bit twiddling
-(6) Memory management
-
-// ~ Assignment Files ~ //
-
-+ answer09.h: Header file contains the declarations that you must 
-implement. These functions must be implemented in a file called
-"answer09.c". 
-+ treefun.c: This source file contains some auxiliary functions that
-are useful for displaying trees, and linked-lists of trees. There is
-also a function that decodes a Huffman file, once the header has been
-read. This last function should be useful to look at, because it shows
-an example of reading a file bit by bit.
-+ treefun.h: Header file for treefun.c. There is no need to edit this
-file.
-+ example.c: Some example code that shows how to write a program that
-reads in a Huffman encoded file (either text or binary header), and
-prints information about it. This code cannot be run until after
-implementation of the functions in "answer09.c"
-+ read-header-example.text: This file shows how a Huffman encoding
-tree is built step-by-step. Please see the "Hints" for more
-information.
-+ README: this file.
-+ tester: for testing your assignment
-+ figures: a folder of jpeg images that illustrates how a tree is
-built.
-+ inputs: a folder that contains 13 input testcases. Six files have
-text headers, and seven files have binary headers. You will need to be
-able to process all of these files without any errors, including
-memory errors.
-+ expected: a folder that shows the expected output for each input
-file, assuming you ran the program in 'example.c'
-+ output-tester: When you run the tester, it will save the output of
-each testcase and the valgrind log for each testcase in separate files
-inside of this directory. Please review these files if you fail a
-testcase, so that you can recreate the problem yourself.
-
-// ~ Submitting Your Assignment ~ //
+(2) Binary (search) trees
+(3) Large datasets
+(4) Memory management
 
 You must submit one zip file to blackboard. This zip file must
 contain:
 (1) answer09.c
+(2) git.log
 
-You create the zip file using the following command.
- 
- > zip pa09.zip answer09.c
+Please create your zip file using the following command:
+
+ > zip pa09.zip answer09.c git.log
 
 If your zip file does not meet the above specification, then you may
 get zero for this assignment. YOU HAVE BEEN WARNED.  Following the
@@ -86,153 +35,190 @@ The tester program is there to ensure that you have followed the
 instructions correctly.
 
 Run the tester program as follows:
- 
+
  > ./tester
 
+// ~ Binary (Search) Trees ~ //
 
-// ~ Hints ~ // 
+From Wikipedia: A binary tree is a tree data structure in which each
+node has at most two children (referred to as the left child and the
+right child).
 
-(*) Help, I don't know where to start?
+This is similar (and more general) to "linked lists", where nodes have
+at most one child.
 
-Start by writing *and* test every function except for:
+Linked List:
+    O   head/tail   O   head        O   head        O   head
+                    |               |               |
+                    V               V               V
+                    O   tail        O               O
+                                    |               |
+                                    V               V
+                                    O   tail        O
+                                                    |
+                                                    V
+                                                    O   tail
 
- (1) void Stack_popPopCombinePush(Stack * stack);
- (2) HuffNode * HuffTree_readTextHeader(FILE * fp);
- (3) HuffNode * HuffTree_readBinaryHeader(FILE * fp);
+Binary Tree:
+    O   root        O   root       O   root            O   root
+                   / \           /   \              /     \
+                  O   O         O     O          O           O
+                left right     / \   / \       /   \       /   \
+                              O   O O   O     O     O     O     O
+                                             / \   / \   / \   / \
+                                            O   O O   O O   O O   O
 
-There is no point attempting the last two functions until after you
-are certain that you have everything else correct. Many of these
-functions are extremely short and simple.
+The above diagrams show *full* binary trees, where every node has
+either zero or two children. It is perfectly acceptable to have a node
+with one child somewhere in the tree:
 
-See the last hint for more information on (1) and (2).
+More Binary Trees:
+    O   root        O   root       O   root       O   root
+                   / \            / \            / \
+                  O   O          O   O          O   O
+                       \        /                \   \
+                        O      O                  O   O
 
---------------------------------------------------------------------------------
+Note that every linked list is (conceptually) also a binary tree.
 
-(*) What is the point of creating a struct "Stack" that only contains
-    a single pointer?
+What makes these structures work so well recursively is their
+naturally recurring instances. If a recursive program can handle one
+node, then it can handle the entire tree.
 
-This is a subtle design issue that illustrates how *encapsulation* can
-simplify code. The Stack interface is six very simple functions that
-operate on a Stack pointer. The person who uses this code (okay
-yourself) never needs to worry about the underlying
-implementation. Simply use the six functions. When you modify the
-stack, you never need to managed the pointer to the head element, or
-consider the case when it is NULL. Simple. (!)
+This assignment combines the power of binary search trees with a set of data
+that is as close to the real world as possible: Data about local businesses.
+Users of the website yelp (http://www.yelp.com) can post reviews and
+recommendation about their local restaurants and share them with the world.
+Yelp hosts about 57 million reviews for businesses catering to 132 million
+users a month, who constantly query their servers for information about their
+local businesses.
 
-By encapsulating the Stack logic, your code will be simpler, and
-easier to keep error free.
+One fundamental problem for companies with huge datasets like Yelp is
+retrieving information from a database. The user experience of the Yelp website
+would be unacceptable if, hypothetically, all of the data describing the
+businesses would be stored in a simple array or linked list: It would mean that
+for every search, the server would have to compare every single entry in the
+database to the search term.
 
---------------------------------------------------------------------------------
+Of course, this is not how it is done in the real world, and this is where tree
+data structures like the binary search tree described above come in.
 
-(*) How do I read a byte or a bit from a binary file?
+The dataset you'll be working with is a small fraction of data pulled from
+Yelp's servers. The information available to you is:
 
-Firstly, if you haven't completed *and* tested
-HuffTree_readTextHeader(...), then you are wasting your time. Do that
-first.
+ - the name of the business
+ - the address of the business
+ - an average rating of the business on a scale of 1 through 4
 
-A big hint for doing this is contained in "treefun.c". If you look at
-the Huffman_applyTree(...) function, you will see an example of how to
-read a file bit by bit.
+You will construct a binary tree from this dataset that is ordered according
+to the names of the businesses. Recall that there exists a certain C library
+that provides functions to compare two strings to each other. This will create
+a tree data structure with the following properties:
 
-Don't forget that a byte is just 8 bits. Therefore, if you want to
-read a byte, you simply read 8 bits, and compose them into a byte.
+(1) Each node's left subtree contains nodes with names "less than" "equal to"
+    its own name
 
---------------------------------------------------------------------------------
+(2) Each node's right subtree contains nodes with names "greater than" its
+    own name
 
-(*) Compose bits into a byte? This bit twiddling is confusing!
+(3) All left and right subtrees are binary search trees themselves.
 
-If you want to set a bit, use logical or: '|'
-If you want to clear bits, use logical and: '&'
-If you want to position a bit, use bit-shifts: '<<' and '>>'
+The relevant theory for why a binary tree is more efficient than a regular
+list is covered in future courses,
+but for a teaser, think about this: if you have a collection of N
+elements in a linked list, and you want to see if element X is in the
+list, then you need to compare X to every element in the list, a total
+of N comparisons. However, if you use a binary search tree, you only
+need to traverse down a single branch, and on average will make around
+log_2(N) comparisons. (i.e., log-base-2 of N.) What it means to
+"traverse down a single branch" will become clear as you write the
+code for this assignment.
 
-So, for example, let:
+// ~ The Yelp Dataset ~ //
 
-   unsigned char X = 0b10010110;
+The dataset you'll be working with is a small fraction of the Yelp Academic
+dataset, which is itself a fraction of Yelp's database that was made public for
+use in academia. More information and a download for the full dataset can be
+found here: http://www.yelp.com/dataset_challenge
 
-To set the smallest (last) bit:
+The data was converted from the JSON format to a text file filled with
+tab-seperated values with the extension '.tsv'. There is a lot more information
+in the full dataset, but for this assignment, you will only use the average
+rating, the name, and the address. The file you're provided with, called
+'yelp_businesses.tsv' has information about 42153 businesses in the United
+States and should be read line by line.
 
-   printBits(X | 0b00000001); // 0b10010111
+One line in the .tsv file lists one business and is structured like this:
 
-To clear the last four bits:
+  [rating]\t[name]\t[address]\n
 
-   printBits(X & 0b11110000); // 0b10010000
+In order to fill the fields of one node, you need to seperate a line according
+to the delimiter '\t'. Remember your explode() function from PA03? It could
+come in very handy for this assignment. If you want to use your explode 
+function from PA03, then you will need to copy and paste it somewhere into
+your answer09.c file. Of course, you don't HAVE to use explode(...) here, as
+long as you create the nodes properly and without memory leaks.
 
-To position a bit in the sixth position:
+// ~ Hints ~ //
 
-   unsigned char six = 1 << 6;
-   printBits(six);            // 0b01000000
+(*) Make sure you read the class notes on binary trees.
 
-Note that I've numbered the bits as follows:
+----------------------------------------------------------------------
 
-   // Bit#  76543210
-   //     0b01000000
+(*) Even though a tree is not an array, it is still easy to "iterate"
+over all of the elements. Iteration means you want to visit every
+element once, and only once. You already know how to do this with an
+array:
 
-The reason is that it follows the value of each bit. 
-For example, if bits "0, 1 and 5" are set, then the
-value of the number is: 
+int myints[] = { 5, 3, 6, 7 };
+for(ind = 0; ind < 4; ++ind)
+   do_something_with(myints[ind]); // see, visit each element once and only once
 
-Bit#  76543210
-    0b00100011 = 2^5 + 2^1 + 2^0 = 32 + 2 + 1 = 35
+With trees, you choose either pre-order, in-order, or post-order
+traversal to do the same thing. You *must* know this for the exam.
+Please look them up in the class notes.
 
-To set the sixth bit:
+----------------------------------------------------------------------
 
-   // Bit#  76543210
-   //     0b10010111
-   // or  0b01000000
-   //              =
-   //     0b11010110
-   printBits(X | six);
+(*) If you get stuck getting started, then try writing just
+create_node(...), and a print_tree(...) function. You should
+then be able to do the following:
 
-To clear every bit except for the sixth
+// Step 1 //
+Create and print trees like so:
 
-   //     0b10010111
-   // and 0b01000000
-   //              =
-   //     0b00000000
-   printBits(X & six);
-
-To test if the sixth bit is set:
-
-   if(X & six != 0) {
-       // The sixth bit was set.
-   } else {
-       // Was not set
-   }
-
-The code for printBits is as follows:
-
-/**
- * Print the bits of X
- * In the for loop, we 
- * (1) take the value of X and right shift it by 'ind' ((X >> ind)
- * (2) clear out all bits except for the zeroth bit.       & 0x01)
- * 0x01 is hexidecimal for 1, and in binary is: 0b00000001
- */
-void printBits(unsigned char X)
+int main(int argc, char * * argv)
 {
-    printf("0b");
-    int ind;
-    for(ind = 7; ind >= 0; --ind)
-	printf("%d", ((X >> ind) & 0x01)); 
-    printf("\n");
+   BusinessNode * root = create_node("5.0", "random name", "random address");
+   root->left = create_node("3.5", "another name", "another address");
+   root->right = create_node("4.0", "yet another name", "some address");
+   root->left->right = create_node("1.5", "name 3", "address 3");
+   print_tree(root);
+   return 0;
 }
 
---------------------------------------------------------------------------------
+// Step 2 //
+Write destroy_tree(...). You should now have no memory leaks or
+errors.
 
-(*) Okay, I'm really, really, stuck on reading the text header, and
-    with pop-pop-combine-push(...)
+// Step 3 //
+Write tree_insert(...) and make sure it
+always works no matter what is thrown at it.
 
-There is no point reading this section until you have implemented the
-first seven functions in answer09.h, and furthermore, that you have
-read the pdf document, and consulted the class notes.
+// Step 4 //
+Write load_tree_from_file(...), which calls insert in a loop.
 
-Please look at the file "read-header-example.text". It shows how the
-stack and encoding tree change as the header is read for the file:
-"inputs/01-tibbs.txt-huff". Your code should replicate exactly the
-same stack of trees as it reads bytes from the header of this file.
+// Step 5 //
+Write tree_search_name() and try to search for some Businesses that you know
+are in the tree.
 
-The function "Stack_print(...)" is your friend.
+At this stage you will be reasonably close to completing the assignment.
 
-Also, ask questions on blackboard, and show up during office hours.  
+----------------------------------------------------------------------
 
+(*) To test the load_tree_from_file(...) function, it makes sense to work with
+a smaller subset of the data. To read the first 10 lines of
+'yelp_businesses.tsv' into a new file called 'shortfile.tsv', use the following
+command:
 
+ > cat yelp_businesses.tsv | head -n 5 >> shortfile.tsv
