@@ -1,287 +1,238 @@
+(Derived from an assignment by Professor Vijay Raghunathan)
 
-// -------------//
+Please read the entire README (including FAQ at the end) before
+starting your assignment, or asking for help.
+
 // ~ Overview ~ //
-// -------------//
 
-This assignment asks you to generate the states of 15 puzzle.  The 15
-puzzle is a popular game.  There are 15 squares in a 4 x 4 box.  One
-is empty.  The solved state is shows below
+Huffman encoding is a loss-less compression technique that is used
+widely in such things as JPEG compression and MP3 compression. It was
+developed in the 1950s (!) by David Huffman, who was doing his PhD at
+MIT. Huffman encoding is still used because it is simple and, under
+certain plausible conditions, it is optimal, which means that someone
+*proved* that there is no better way to compress data. (!)
 
-1  2  3  4
-5  6  7  8
-9  A  B  C
-D  E  F  -
+Please read the entire attached PDF file from Spring 2013. This file
+includes the relevant theory for Huffman encoding.
 
-Here, we use A to F for numbers 10 to 15. - is the space.  To play
-this game, you can move the space.  For example, moving - up changes
-the state to
+To complete this assignment, you must write ten functions, as listed
+in "answer11.h".
 
-1  2  3  4
-5  6  7  8
-9  A  B  -
-D  E  F  C
+// ~ Hard ~ //
 
-Moving - left changes the state to
+THIS ASSIGNMENT IS HARD. DO NOT LEAVE IT TO THE LAST MINUTE.
 
-1  2  3  4
-5  6  7  8
-9  A  -  B
-D  E  F  C
-
-To solve this state, you can move - right and down.  However, if
-you move it down and right, you will get this state
-
-1  2  3  4
-5  6  7  8
-9  A  F  B
-D  E  C  -
-
-To make it simple, we will express each state by a single line from
-the upper left side to the lower right side.  The solved state is
-expressed as
-
-123456789ABCDEF- 
-
-There is no space between the numbers.
-
-123456789A-BDEFC expresses the following state
-
-1  2  3  4
-5  6  7  8
-9  A  -  B
-D  E  F  C
-
-Please notice that we do not use "10"; we use "A" instead.
-
-This assignment has three stages:
-
-1. given a valid state and a sequence, output the final state
-   A sequence contains only four possible moves: 
-   R: move space right
-   L: move space left
-   U: move space up
-   D: move space down
-
-2. give a valid state and a number n, output all possible states after
-   zero to n moves.
-
-3. give a valid state, find a sequence that can move to the initial
-   (solved) state
-
-These stages are described in detail below.
-
-// -------------------//
 // ~ Learning Goals ~ //
-// -------------------//
 
-(1) Recursion.
-(2) Binary trees to efficiently manage a collection of unique items.
-(3) Managing memory.
+(1) Recursion
+(2) Linked-lists
+(3) Binary Trees
+(4) Binary files
+(5) Bit twiddling
+(6) Memory management
 
-// ---------------------//
 // ~ Assignment Files ~ //
-// ---------------------//
 
-+ answer11.h: Header file contains function declarations and
-documentation. You must implement each of the declared functions in
-the file "answer11.c"
-+ answer11.c: Contains two function which are given to you. You must
-complete the rest of the function (specified in answer11.h)
-+ README: This file
-+ tester: For ensuring the correctness of your solution.
++ answer11.h: Header file contains the declarations that you must 
+implement. These functions must be implemented in a file called
+"answer11.c". 
++ treefun.c: This source file contains some auxiliary functions that
+are useful for displaying trees, and linked-lists of trees. There is
+also a function that decodes a Huffman file, once the header has been
+read. This last function should be useful to look at, because it shows
+an example of reading a file bit by bit.
++ treefun.h: Header file for treefun.c. There is no need to edit this
+file.
++ example.c: Some example code that shows how to write a program that
+reads in a Huffman encoded file (either text or binary header), and
+prints information about it. This code cannot be run until after
+implementation of the functions in "answer11.c"
++ read-header-example.text: This file shows how a Huffman encoding
+tree is built step-by-step. Please see the "Hints" for more
+information.
++ README: this file.
++ tester: for testing your assignment
++ figures: a folder of jpeg images that illustrates how a tree is
+built.
++ inputs: a folder that contains 13 input testcases. Six files have
+text headers, and seven files have binary headers. You will need to be
+able to process all of these files without any errors, including
+memory errors.
++ expected: a folder that shows the expected output for each input
+file, assuming you ran the program in 'example.c'
++ output-tester: When you run the tester, it will save the output of
+each testcase and the valgrind log for each testcase in separate files
+inside of this directory. Please review these files if you fail a
+testcase, so that you can recreate the problem yourself.
 
-You must also create "pa11.c", which contains the main(...) function
-for this assignment. The specification for the main function is
-contained within the descriptions of the three stages below.
-
-// -------------------------------//
 // ~ Submitting Your Assignment ~ //
-// -------------------------------//
 
-You must submit one zip file to blackboard. This zip file must
+You must submit one zip file to Blackboard. This zip file must
 contain:
 (1) answer11.c
-(2) pa11.c
 
 You create the zip file using the following command.
  
- > zip pa11.zip answer11.c pa11.c
+ > zip pa11.zip answer11.c
 
 If your zip file does not meet the above specification, then you may
 get zero for this assignment. YOU HAVE BEEN WARNED.  Following the
 instructions is *part* of getting the assignment correct. So please
 follow the instructions.
 
-// ---------------------------------//
-// ~ Stage "0" :: Checking Inputs ~ //
-// ---------------------------------//
+// ~ Determining Your Mark ~ //
 
-This isn't really a stage of the assignment; however, you will need to
-check that input arguments are valid. There are two functions that
-should be written:
+The tester program is there to ensure that you have followed the
+instructions correctly.
 
-(1) isValidState(...)
-(2) isValidMoveList(...)
+Run the tester program as follows:
+ 
+ > ./tester
 
-These are described in "answer11.h"
 
-You should also check that argv[1] is either "1", "2", or "3". If it
-is none of these (or doesn't exist), then return EXIT_FAILURE.
+// ~ Hints ~ // 
 
-// -------------------------------------//
-// ~ Stage 1 :: Procesing a Move List ~ //
-// -------------------------------------//
+(*) Help, I don't know where to start?
 
-The program's inputs (argv) has three arguments:
-+ argv[1]: "1" means stage 1
-+ argv[2]: a string as a valid state
-+ argv[3]: another string as the move sequence
+Start by writing *and* test every function except for:
 
-If argv[2] is not a valid board state, or if argv[3] is not a valid
-move-list, then return EXIT_FAILURE.
+ (1) void Stack_popPopCombinePush(Stack * stack);
+ (2) HuffNode * HuffTree_readTextHeader(FILE * fp);
+ (3) HuffNode * HuffTree_readBinaryHeader(FILE * fp);
 
-Otherwise, process the moves in the move-list, and print out the new
-board state, and return EXIT_SUCCESS.
+There is no point attempting the last two functions until after you
+are certain that you have everything else correct. Many of these
+functions are extremely short and simple.
 
-It is possible that the move sequence will produce an invalid state.
-For example, if the input is the initial state and the sequence starts
-with D, the result is an invalid state.  Your output should be "I",
-and you should still return EXIT_SUCCESS.
+See the last hint for more information on (1) and (2).
 
-Here are some sample outputs:
+--------------------------------------------------------------------------------
 
- > ./pa11 1 123456789AFBDE-C U
-123456789A-BDEFC
+(*) What is the point of creating a struct "Stack" that only contains
+    a single pointer?
 
- > ./pa11 1 123456789AFBDE-C UUU
-12-456389A7BDEFC
+This is a subtle design issue that illustrates how *encapsulation* can
+simplify code. The Stack interface is six very simple functions that
+operate on a Stack pointer. The person who uses this code (okay
+yourself) never needs to worry about the underlying
+implementation. Simply use the six functions. When you modify the
+stack, you never need to manage the pointer to the head element, or
+consider the case when it is NULL. Simple. (!)
 
- > ./pa11 1 123456789AFBDE-C D
-I
+By encapsulating the Stack logic, your code will be simpler, and
+easier to keep error free.
 
- > ./pa11 1 123456789AFBDE-C LLUUU
--23416785AFB9DEC
+--------------------------------------------------------------------------------
 
-You must test this code yourself, by generating your own test cases,
-and running them. You may be helpful to print the puzzle in a 2d
-array as you do this. Think about the problem as follows:
-(1) Given a board state, what sequences are valid and invalid
-(2) Does my program produce exactly the correct states?
-(3) Does my program dismiss exactly the expected states.
+(*) How do I read a byte or a bit from a binary file?
 
-## A Note about "validity" and "solvability" ##
+Firstly, if you haven't completed *and* tested
+HuffTree_readTextHeader(...), then you are wasting your time. Do that
+first.
 
-Stage 1 only tests if a puzzle state is a _legal_ puzzle state. However,
-in the 15 puzzle, half the legal states are unreachable from each other!
-This fact was exploited by the famous 19th century America puzzle expert
-Sam Lloyd, who offered $1000 for the correct solution to "123456789ABCDFE-".
-There is no solution, but Lloyd may not have been able to prove it at the 
-time. $1000 in 1880 is about $25000 in 2013. See me if you are interested in a
-proof for why Lloyd's wager was safe.
+A big hint for doing this is contained in "treefun.c". If you look at
+the Huffman_applyTree(...) function, you will see an example of how to
+read a file bit by bit.
 
-Note: In a truly shameless act of self-promotion (probably typical in the 
-19th century), Lloyd claimed to have invented the 15-puzzle himself. He did 
-not. It first appeared about fifteen years before any of Lloyd's publications.
+Don't forget that a byte is just 8 bits. Therefore, if you want to
+read a byte, you simply read 8 bits, and compose them into a byte.
 
-// -----------------------------------//
-// ~ Stage 2 :: Generate a MoveTree ~ //
-// -----------------------------------//
+--------------------------------------------------------------------------------
 
-The program's inputs (argv) has three arguments:
-+ argv[1]: "2" means stage 2
-+ argv[2]: a string as a valid state
-+ argv[3]: a number between 0 and 9 (inclusive)
+(*) Compose bits into a byte? This bit twiddling is confusing!
 
-If argv[2] is not a valid board state, or if argv[3] is not a valid
-integer between [0..9] inclusive, then return EXIT_FAILURE.
+If you want to set a bit, use logical or: '|'
+If you want to clear bits, use logical and: '&'
+If you want to position a bit, use bit-shifts: '<<' and '>>'
 
-Otherwise, the program should generate *unique* states after zero to
-so many moves, and return EXIT_SUCCESS.
+So, for example, let:
 
-You do not need to worry about the order of these states since the
-states will be sorted before grading.
+   unsigned char X = 0b10010110;
 
-You will receive no point if your program prints duplicate states.  One
-way to check is to send your program to the sort program in Linux and
-then use the uniq program in Linux.  Adding "-d" after uniq will print
-duplicates.  This is a way to check.
+To set the smallest (last) bit:
 
- > ./pa11 2 state num | sort | uniq -d
+   printBits(X | 0b00000001); // 0b10010111
 
-Here are some sample outputs:
+To clear the last four bits:
 
- > ./pa11 2 123-456789AFBDEC 1
-123-456789AFBDEC
-12-3456789AFBDEC
-1237456-89AFBDEC
+   printBits(X & 0b11110000); // 0b10010000
 
- > ./pa11 2 123-456789AFBDEC 2
-123-456789AFBDEC
-12-3456789AFBDEC
-1-23456789AFBDEC
-1237456-89AFBDEC
-123745-689AFBDEC
-1237456F89A-BDEC
-126345-789AFBDEC
+To position a bit in the sixth position:
 
- > ./pa11 2 123-456789AFBDEC 3
-123-456789AFBDEC
-12-3456789AFBDEC
-1-23456789AFBDEC
--123456789AFBDEC
-12-7453689AFBDEC
-1237456-89AFBDEC
-123745-689AFBDEC
-12374-5689AFBDEC
-1237456F89A-BDEC
-1237456F89-ABDEC
-1237456F89ACBDE-
-123745A689-FBDEC
-126345-789AFBDEC
-12634-5789AFBDEC
-126345A789-FBDEC
-1263457-89AFBDEC
-15234-6789AFBDEC
+   unsigned char six = 1 << 6;
+   printBits(six);            // 0b01000000
 
-// ----------------------------------//
-// ~ Stage 3 :: Solving the Puzzle ~ //
-// ----------------------------------//
+Note that I've numbered the bits as follows:
 
-The program's inputs (argv) has two arguments:
-+ argv[1]: "3" means stage 3
-+ argv[2]: a string as a valid state
+   // Bit#  76543210
+   //     0b01000000
 
-If argv[2] is not a valid board state then return EXIT_FAILURE.
+The reason is that it follows the value of each bit. 
+For example, if bits "0, 1 and 5" are set, then the
+value of the number is: 
 
-Otherwise, your program should generate a sequence that moves the
-puzzle to the initial state, and return EXIT_SUCCESS. The length of
-this sequence must be between 1 and 9 (inclusive). Always return
-EXIT_SUCCESS, even if no solution is found.
+Bit#  76543210
+    0b00100011 = 2^5 + 2^1 + 2^0 = 32 + 2 + 1 = 35
 
-Below is some sample output:
+To set the sixth bit:
 
- > make && ./pa11 3 -23416785ABC9DEF
-DDDRRR
+   // Bit#  76543210
+   //     0b10010111
+   // or  0b01000000
+   //              =
+   //     0b11010110
+   printBits(X | six);
 
-Note that a solution could be up to 80 moves long, which is impossible
-to calculate with this approach. So why do it this way? This assignment
-is instructive, in that it shows that, in general, brute-force solutions 
-work for tiny problems only. Brute force solutions often require more
-time and energy to solve than is available in the known universe, and
-so knowing _how_ to get a solution is not the same as being _able_ to 
-calculate it. This is a major road-block in artificial intelligence.
-Russel Norvig's classic book "Artificial Intelligence" has more 
-information on how to solve the 15-puzzle.
+To clear every bit except for the sixth
 
-// ----------//
-// ~ Hints ~ //
-// ----------//
+   //     0b10010111
+   // and 0b01000000
+   //              =
+   //     0b00000000
+   printBits(X & six);
 
-(*) You should finish the first stage before starting the second
-stage; you should finish the second stage before starting the third
-stage.
+To test if the sixth bit is set:
 
-(*) For stage 2, your program needs to remember a state and does not
-have duplicate states.  You should use a binary tree to keep the
-states.
+   if(X & six != 0) {
+       // The sixth bit was set.
+   } else {
+       // Was not set
+   }
+
+The code for printBits is as follows:
+
+/**
+ * Print the bits of X
+ * In the for loop, we 
+ * (1) take the value of X and right shift it by 'ind' ((X >> ind)
+ * (2) clear out all bits except for the zeroth bit.       & 0x01)
+ * 0x01 is hexidecimal for 1, and in binary is: 0b00000001
+ */
+void printBits(unsigned char X)
+{
+    printf("0b");
+    int ind;
+    for(ind = 7; ind >= 0; --ind)
+	printf("%d", ((X >> ind) & 0x01)); 
+    printf("\n");
+}
+
+--------------------------------------------------------------------------------
+
+(*) Okay, I'm really, really, stuck on reading the text header, and
+    with pop-pop-combine-push(...)
+
+There is no point reading this section until you have implemented the
+first seven functions in answer11.h, and furthermore, that you have
+read the pdf document, and consulted the class notes.
+
+Please look at the file "read-header-example.text". It shows how the
+stack and encoding tree change as the header is read for the file:
+"inputs/01-tibbs.txt-huff". Your code should replicate exactly the
+same stack of trees as it reads bytes from the header of this file.
+
+The function "Stack_print(...)" is your friend.
+
+Also, ask questions on Blackboard, and show up during office hours.  
+
 
