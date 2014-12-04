@@ -1,0 +1,89 @@
+
+Testcase 7 :: 07-description.bit-huff
+   Reading file: 'inputs/07-description.bit-huff', textmode = FALSE.
+   Huffman coding tree is:
+   1
+        1
+             1
+                  i
+                  1
+                       r
+                       1
+                            c
+                            p
+             1
+                  1
+                       a
+                       1
+                            1
+                                 1
+                                      1
+                                           Y
+                                           j
+                                      .
+                                 w
+                            d
+                  1
+                       n
+                       1
+                            m
+                            1
+                                 1
+                                      P
+                                      k
+                                 f
+        1
+             1
+                  1
+                       o
+                       s
+                  1
+                       e
+                       1
+                            1
+                                 y
+                                 1
+                                      z
+                                      ,
+                            l
+             1
+                  ' '
+                  1
+                       1
+                            u
+                            1
+                                 g
+                                 1
+                                      1
+                                           b
+                                           q
+                                      1
+                                           1
+                                                (
+                                                )
+                                           1
+                                                3
+                                                E
+                       1
+                            t
+                            1
+                                 1
+                                      1
+                                           1
+                                                G
+                                                H
+                                           1
+                                                I
+                                                J
+                                      1
+                                           1
+                                                M
+                                                R
+                                           1
+                                                T
+                                                V
+                                 h
+   
+   Message is:
+   The description is mainly taken from Professor Vijay Raghunathan. In this assignment, you will utilize your knowledge about priority queues, stacks, and trees to design a file compression program and file decompression program (similar to zip and unzip). You will base your utilities on the widely used algorithmic technique of Huffman coding, which is used in JPEG compression as well as in MP3 audio compression.
+Pass.

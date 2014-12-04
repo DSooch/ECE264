@@ -1,0 +1,62 @@
+
+Testcase 4 :: 04-waterfront.txt-huff
+   Reading file: 'inputs/04-waterfront.txt-huff', textmode = TRUE.
+   Huffman coding tree is:
+   1
+        1
+             ' '
+             1
+                  1
+                       1
+                            i
+                            m
+                       n
+                  1
+                       1
+                            I
+                            b
+                       1
+                            h
+                            l
+        1
+             1
+                  1
+                       1
+                            1
+                                 '
+                                 ,
+                            1
+                                 r
+                                 w
+                       o
+                  1
+                       1
+                            1
+                                 1
+                                      \n
+                                      !
+                                 1
+                                      Y
+                                      f
+                            t
+                       a
+             1
+                  1
+                       d
+                       e
+                  1
+                       1
+                            1
+                                 1
+                                      v
+                                      y
+                                 .
+                            c
+                       1
+                            s
+                            u
+   
+   Message is:
+   You don't understand! I coulda had class. I coulda been a contender. I could've been somebody, instead of a bum, which is what I am.
+   
+Pass.

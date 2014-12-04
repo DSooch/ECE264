@@ -1,0 +1,61 @@
+Reading file: 'inputs/06-mama.txt-huff', textmode = TRUE.
+Huffman coding tree is:
+1
+     1
+          1
+               1
+                    w
+                    1
+                         c
+                         f
+               1
+                    1
+                         g
+                         h
+                    1
+                         k
+                         r
+          1
+               1
+                    1
+                         u
+                         y
+                    1
+                         1
+                              \n
+                              '
+                         1
+                              M
+                              Y
+               a
+     1
+          1
+               1
+                    1
+                         1
+                              b
+                              d
+                         1
+                              m
+                              v
+                    1
+                         i
+                         t
+               1
+                    e
+                    1
+                         1
+                              x
+                              .
+                         l
+          1
+               ' '
+               1
+                    o
+                    1
+                         n
+                         s
+
+Message is:
+Mama always said life was like a box of chocolates. You never know what you're gonna get.
+
