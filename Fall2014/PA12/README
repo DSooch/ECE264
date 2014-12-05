@@ -104,10 +104,8 @@ mathematics behind this function.
 We will be testing LARGE prime numbers. These will be 128 bit
 integers, which are far too large to fit in measly 32-bit or 64-bit
 int variables. A 32-bit int variable can only contain values from 0 to
-4 294 967 295, but with unsigned 128 bit numbers, you can go all the
-way to 340 282 366 920 938 463 463 374 607 431 768 211 455. (If you
-need that extra push over the cliff, then you what we do? See:
-http://www.youtube.com/watch?v=EbVKWCpNFhY)
+4,294,967,295, but with unsigned 128 bit numbers, you can go all the
+way to 340,282,366,920,938,463,463,374,607,431,768,211,455.
 
 GCC has a native 128-bit integer type called "__int128". In this
 assignment we are interested in /unsigned/ integers, and so we will be
